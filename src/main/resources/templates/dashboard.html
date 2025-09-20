@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<h1>Welcome</h1>
+
+<button onclick="logout()">Çıkış</button>
+
+<script>
+    function logout() {
+        localStorage.removeItem("token");
+        window.location.href = "/auth/giris";
+    }
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            alert("Token bulunamadı, giriş yapmalısın.");
+            window.location.href = "/auth/giris";
+        }
+
+        fetch("/api/protected-data", {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            } else {
+                throw new Error("Yetkisiz erişim");
+            }
+        })
+        .then(data => {
+            const p = document.createElement("p");
+            p.textContent = data;
+            document.body.appendChild(p);
+        })
+        .catch(error => {
+            console.error(error);
+            alert("Yetkisiz. Giriş yapmalısın.");
+            window.location.href = "/auth/giris";
+        });
+    });
+</script>
+
+
+</body>
+</html>

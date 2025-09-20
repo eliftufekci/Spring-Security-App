@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .verify-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            transition: transform 0.3s ease;
+        }
+
+        .verify-container:hover {
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        form > * {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input[type="email"],
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+        }
+
+        input[type="email"]:focus,
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .g-recaptcha {
+            display: flex;
+            justify-content: center;
+            transform: scale(0.9);
+            transform-origin: center;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 480px) {
+            .verify-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            .g-recaptcha {
+                transform: scale(0.8);
+            }
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+<div class="verify-container">
+<h2>Doğrula</h2>
+
+<form id="verifyForm">
+    <label for="email">E-mail:</label>
+    <input type="email" id="email" name="email" required /><br><br>
+
+    <label for="verificationCode">Doğrulama Kodu:</label>
+    <input type="text" id="verificationCode" name="verificationCode" required /><br><br>
+
+    <br>
+
+    <button type="submit">Doğrula</button>
+</form>
+</div>
+
+<script>
+    document.getElementById('verifyForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent form submission
+
+        fetch("/auth/verify", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                email: document.getElementById("email").value,
+                verificationCode: document.getElementById("verificationCode").value
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("Welcome");
+            } else {
+                return response.text().then(errorText => {
+                    alert("Verification failed: " + errorText);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("Verification request failed.");
+        });
+    });
+</script>
+</body>
+</html>

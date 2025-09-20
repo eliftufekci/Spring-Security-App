@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>OAuth Success</title>
+</head>
+<body>
+<div id="loading">
+    <h2>🔄 Giriş yapılıyor...</h2>
+    <p>Lütfen bekleyin, yönlendiriliyorsunuz...</p>
+</div>
+
+<script>
+    // URL'den token'ı al
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
+    if (token) {
+        // Token'ı localStorage'a kaydet
+        localStorage.setItem('token', token);
+
+        // Dashboard'a yönlendir
+        window.location.href = '/auth/dashboard';
+    } else {
+        // Hata durumunda giriş sayfasına geri dön
+        alert('OAuth giriş başarısız!');
+        window.location.href = '/auth/giris';
+    }
+</script>
+</body>
+</html>
