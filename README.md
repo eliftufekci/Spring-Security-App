@@ -58,7 +58,7 @@ Key Features
 1. Clone the repository:
 
 bash
->> git clone https://github.com/elif4/security-FullDemo.git
+>> git clone https://github.com/eliftufekci/Spring-Security-App.git
 >> cd security-FullDemo
 
 2. Install Maven dependencies:
